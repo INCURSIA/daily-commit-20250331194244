@@ -1,0 +1,26 @@
+
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure Git (21f3001076@ds.study.iitm.ac.in)
+        run: |
+          git config user.name "INCURSIA"
+          git config user.email "21f3001076@ds.study.iitm.ac.in"
+
+      - name: Make daily commit
+        run: |
+          echo "Last run: $(date) $RANDOM" > last_run.txt
+          git add last_run.txt
+          git commit -m "Daily commit on $(date) $RANDOM" || echo "No changes to commit"
+          git push
